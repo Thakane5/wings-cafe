@@ -1,16 +1,17 @@
 const express = require("express");
 const fs = require("fs");
-const cors = require("cors");
-const bodyParser = require("body-parser");
 const path = require("path");
+const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 5000; // ✅ Use Render’s port if provided
+const PORT = process.env.PORT || 5000; // Render's port
 
+// Middlewares
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // Use express.json() instead of body-parser
 
-const DB_FILE = path.join(__dirname, "data", "database.json");
+// Database file directly in backend folder
+const DB_FILE = path.join(__dirname, "database.json");
 
 // Load DB
 function loadDB() {
@@ -28,7 +29,7 @@ function saveDB(data) {
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
 
-// Create transaction
+// Add transaction helper
 function addTransaction(db, { name, price, qtyBefore, qtyAfter, action, total }) {
   const transaction = {
     id: Date.now(),
@@ -44,14 +45,11 @@ function addTransaction(db, { name, price, qtyBefore, qtyAfter, action, total })
 }
 
 // ---------------------- PRODUCTS ----------------------
-
-// Get all products
 app.get("/products", (req, res) => {
   const db = loadDB();
   res.json(db.products);
 });
 
-// Add product
 app.post("/products", (req, res) => {
   const db = loadDB();
   const newProduct = {
@@ -78,7 +76,6 @@ app.post("/products", (req, res) => {
   res.json(newProduct);
 });
 
-// Update product (restock/edit)
 app.patch("/products/:id", (req, res) => {
   const db = loadDB();
   const product = db.products.find((p) => p.id === parseInt(req.params.id));
@@ -102,7 +99,6 @@ app.patch("/products/:id", (req, res) => {
   res.json(product);
 });
 
-// Delete product
 app.delete("/products/:id", (req, res) => {
   const db = loadDB();
   const product = db.products.find((p) => p.id === parseInt(req.params.id));

@@ -4,10 +4,9 @@ import "./Dashboard.css";
 function Dashboard() {
   const [products, setProducts] = useState([]);
 
-  // Fetch products from backend
   const fetchProducts = async () => {
     try {
-      const res = await fetch("http://localhost:5000/products");
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/products`);
       const data = await res.json();
       setProducts(data);
     } catch (error) {
@@ -21,16 +20,13 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
-      <h1>Welcome to Wings Cafe - taste what we're passionate about
-      </h1>
+      <h1>Welcome to Wings Cafe - taste what we're passionate about</h1>
       <div className="products-grid">
         {products.length > 0 ? (
           products.map((product) => (
             <div
               key={product.id}
-              className={`product-card ${
-                product.quantity < 5 ? "low-stock" : ""
-              }`}
+              className={`product-card ${product.quantity < 5 ? "low-stock" : ""}`}
             >
               <div className="product-image">
                 <img src={product.image} alt={product.name} />

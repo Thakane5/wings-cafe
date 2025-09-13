@@ -71,9 +71,28 @@
       "price": 2,
       "quantity": 10,
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ230sQ7ymuzHNFgnUpxMyCe7gnMDTslyWQ5A&s"
+    },
+    {
+      "id": 1757790942083,
+      "name": "NikNaks",
+      "description": "New product",
+      "category": "General",
+      "price": 0,
+      "quantity": 0,
+      "image": ""
     }
   ],
   "sales": [],
-  
-  "transactions": []
+  "transactions": [
+    {
+      "id": 1757790942083,
+      "date": "9/13/2025, 9:15:42 PM",
+      "name": "NikNaks",
+      "price": 0,
+      "qtyBefore": 0,
+      "qtyAfter": 0,
+      "action": "Added",
+      "total": 0
+    }
+  ]
 }

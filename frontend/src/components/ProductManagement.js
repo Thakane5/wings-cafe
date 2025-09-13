@@ -1,4 +1,3 @@
-// src/components/ProductManagement.js
 import React, { useState, useEffect } from "react";
 import "./ProductManagement.css";
 
@@ -7,8 +6,8 @@ function ProductManagement() {
   const [newName, setNewName] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
 
-  // Change to your hosted backend URL after deploying
-  const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+  // Use correct environment variable
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   // Fetch all products from backend
   const fetchProducts = async () => {
@@ -23,17 +22,13 @@ function ProductManagement() {
     }
   };
 
-  // Load products on page load
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  // Add new product (only needs name, backend will fill others with defaults)
+  // Add new product
   const handleAddProduct = async () => {
-    if (!newName.trim()) {
-      alert("Please enter a product name");
-      return;
-    }
+    if (!newName.trim()) return alert("Please enter a product name");
 
     try {
       const response = await fetch(`${API_BASE}/products`, {
@@ -45,18 +40,16 @@ function ProductManagement() {
           category: "General",
           price: 0,
           quantity: 0,
-          image: "" // backend or you can later update with real image
+          image: "",
         }),
       });
 
       if (!response.ok) throw new Error("Failed to add product");
 
       const addedProduct = await response.json();
-
-      // Update frontend immediately
       setProducts((prev) => [...prev, addedProduct]);
       setStatusMessage(`✅ Added product: ${addedProduct.name}`);
-      setNewName(""); // clear input
+      setNewName("");
     } catch (error) {
       console.error("Error adding product:", error);
       setStatusMessage("⚠️ Could not add product");
@@ -66,11 +59,8 @@ function ProductManagement() {
   return (
     <div className="pm-container">
       <h1>Product Management</h1>
-
-      {/* Status message */}
       {statusMessage && <p>{statusMessage}</p>}
 
-      {/* Add product section */}
       <div className="pm-add-section">
         <h2>Add New Product</h2>
         <input
@@ -82,7 +72,6 @@ function ProductManagement() {
         <button onClick={handleAddProduct}>Add Product</button>
       </div>
 
-      {/* Product list */}
       <div className="pm-products-section">
         <h2>Available Products ({products.length})</h2>
         {products.length === 0 ? (
@@ -93,8 +82,7 @@ function ProductManagement() {
               <div key={product.id} className="pm-product-card">
                 <img
                   src={
-                    product.image ||
-                    "https://via.placeholder.com/150?text=No+Image"
+                    product.image || "https://via.placeholder.com/150?text=No+Image"
                   }
                   alt={product.name}
                 />

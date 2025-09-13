@@ -1,125 +1,102 @@
-.pm-container {
-  padding: 20px;
-  background-color: transparent;
+import React, { useState, useEffect } from "react";
+import "./ProductManagement.css";
+
+function ProductManagement() {
+  const [products, setProducts] = useState([]);
+  const [newName, setNewName] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
+
+  // Use correct environment variable
+  const API_BASE = process.env.REACT_APP_API_URL;
+
+  // Fetch all products from backend
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/products`);
+      if (!response.ok) throw new Error("Failed to fetch products");
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error loading products:", error);
+      setStatusMessage("⚠️ Could not load products. Is server running?");
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Add new product
+  const handleAddProduct = async () => {
+    if (!newName.trim()) return alert("Please enter a product name");
+
+    try {
+      const response = await fetch(`${API_BASE}/products`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newName,
+          description: "New product",
+          category: "General",
+          price: 0,
+          quantity: 0,
+          image: "",
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to add product");
+
+      const addedProduct = await response.json();
+      setProducts((prev) => [...prev, addedProduct]);
+      setStatusMessage(`✅ Added product: ${addedProduct.name}`);
+      setNewName("");
+    } catch (error) {
+      console.error("Error adding product:", error);
+      setStatusMessage("⚠️ Could not add product");
+    }
+  };
+
+  return (
+    <div className="pm-container">
+      <h1>Product Management</h1>
+      {statusMessage && <p>{statusMessage}</p>}
+
+      <div className="pm-add-section">
+        <h2>Add New Product</h2>
+        <input
+          type="text"
+          placeholder="Enter product name"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+        />
+        <button onClick={handleAddProduct}>Add Product</button>
+      </div>
+
+      <div className="pm-products-section">
+        <h2>Available Products ({products.length})</h2>
+        {products.length === 0 ? (
+          <p>No products available yet</p>
+        ) : (
+          <div className="pm-products-grid">
+            {products.map((product) => (
+              <div key={product.id} className="pm-product-card">
+                <img
+                  src={
+                    product.image || "https://via.placeholder.com/150?text=No+Image"
+                  }
+                  alt={product.name}
+                />
+                <h3>{product.name}</h3>
+                <p>Price: M{product.price}</p>
+                <p>Stock: {product.quantity}</p>
+                <p>{product.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
-.pm-add-section {
-  margin-bottom: 30px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-h1{
-  text-align:center ;
-}
-
-.pm-add-section input {
-  padding: 8px;
-  width: 200px;
-  margin: 5px 10px 10px 0;
-}
-
-.pm-add-section button {
-  padding: 8px 16px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.pm-add-section button:hover {
-  background-color: #45a049;
-}
-
-.pm-products-section {
-  margin-bottom: 30px;
-}
-
-.pm-products-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.pm-product-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 200px;
-  border-radius: 5px;
-  text-align: center;
-  background-color: #F2F0EF;
-
-}
-
-.pm-product-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-}
-
-.pm-product-card button {
-  padding: 5px 10px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-
-.pm-product-card button:hover {
-  background-color: #d32f2f;
-}
-
-.pm-stock-section table {
-  width: 100%;
-  border-collapse: collapse;
-
-}
-
-.pm-stock-section th,
-.pm-stock-section td {
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: center;
-}
-
-.pm-stock-section th {
-  background-color: #f2f2f2;
-}
-.pm-stock-section  tr:nth-child(even) {
-  background-color: #fafafa;
-}
-.pm-stock-section tr:hover {
-  background-color: blue;
-}
-
-.pm-stock-section img {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-}
-
-.pm-stock-section button {
-  padding: 5px;
-  margin: 2px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  color: white;
-}
-
-.pm-stock-section button:nth-child(1),
-.pm-stock-section button:nth-child(3) {
-  background-color: #4caf50;
-}
-
-.pm-stock-section button:nth-child(2),
-.pm-stock-section button:nth-child(4) {
-  background-color: #2196f3;
-}
-
-.pm-stock-section button:hover {
-  opacity: 0.85;
-}
+export default ProductManagement;

@@ -1,21 +1,14 @@
-// src/components/StockManagement.js
 import React, { useState, useEffect } from "react";
 
 function StockManagement() {
   const [products, setProducts] = useState([]);
   const [statusMessage, setStatusMessage] = useState("");
-
-  const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
-
-  // Fetch products on load
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`${API_BASE}/products`);
-      const data = await response.json();
+      const res = await fetch(`${API_BASE}/products`);
+      const data = await res.json();
       setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -23,23 +16,23 @@ function StockManagement() {
     }
   };
 
-  // Restock or reduce stock
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   const updateStock = async (product, change) => {
     const newQty = Math.max(0, product.quantity + change);
-
     try {
-      const response = await fetch(`${API_BASE}/products/${product.id}`, {
+      const res = await fetch(`${API_BASE}/products/${product.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: newQty }),
       });
 
-      if (!response.ok) throw new Error("Failed to update stock");
+      if (!res.ok) throw new Error("Failed to update stock");
 
-      setStatusMessage(
-        `${change > 0 ? "➕ Restocked" : "➖ Reduced"} ${product.name}`
-      );
-      fetchProducts(); // refresh list
+      setStatusMessage(`${change > 0 ? "➕ Restocked" : "➖ Reduced"} ${product.name}`);
+      fetchProducts();
     } catch (error) {
       console.error("Error updating stock:", error);
       setStatusMessage("⚠️ Could not update stock");
@@ -70,12 +63,10 @@ function StockManagement() {
                 <td>{product.name}</td>
                 <td>
                   <img
-                    src={
-                      product.image ||
-                      "https://via.placeholder.com/50?text=No+Image"
-                    }
+                    src={product.image || "https://via.placeholder.com/50"}
                     alt={product.name}
-                    style={{ width: "50px", height: "50px" }}
+                    width="50"
+                    height="50"
                   />
                 </td>
                 <td>M{product.price}</td>

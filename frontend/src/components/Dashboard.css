@@ -1,0 +1,124 @@
+.dashboard {
+  padding: 20px;
+  background-color: trasparent;
+  min-height: 100vh;
+}
+
+.dashboard h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #000;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 2rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background-color: #F2F0EF;
+}
+
+.product-card.low-stock {
+  border: 6px solid #ff4d4f;
+  position: relative;
+}
+
+.product-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.05);
+}
+
+.low-stock-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4d4f;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.product-info {
+  padding: 15px;
+}
+
+.product-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.product-category {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-description {
+  color: #777;
+  font-size: 0.9rem;
+  margin: 0 0 15px 0;
+  line-height: 1.4;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-price {
+  font-weight: bold;
+  color: #2c5aa0;
+  font-size: 1.1rem;
+}
+
+.product-quantity {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  
+  .dashboard h1 {
+    font-size: 1.5rem;
+  }
+}

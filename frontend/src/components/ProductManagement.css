@@ -1,0 +1,125 @@
+.pm-container {
+  padding: 20px;
+  background-color: transparent;
+}
+
+.pm-add-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+h1{
+  text-align:center ;
+}
+
+.pm-add-section input {
+  padding: 8px;
+  width: 200px;
+  margin: 5px 10px 10px 0;
+}
+
+.pm-add-section button {
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pm-add-section button:hover {
+  background-color: #45a049;
+}
+
+.pm-products-section {
+  margin-bottom: 30px;
+}
+
+.pm-products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.pm-product-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 200px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #F2F0EF;
+
+}
+
+.pm-product-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.pm-product-card button {
+  padding: 5px 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.pm-product-card button:hover {
+  background-color: #d32f2f;
+}
+
+.pm-stock-section table {
+  width: 100%;
+  border-collapse: collapse;
+
+}
+
+.pm-stock-section th,
+.pm-stock-section td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.pm-stock-section th {
+  background-color: #f2f2f2;
+}
+.pm-stock-section  tr:nth-child(even) {
+  background-color: #fafafa;
+}
+.pm-stock-section tr:hover {
+  background-color: blue;
+}
+
+.pm-stock-section img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.pm-stock-section button {
+  padding: 5px;
+  margin: 2px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  color: white;
+}
+
+.pm-stock-section button:nth-child(1),
+.pm-stock-section button:nth-child(3) {
+  background-color: #4caf50;
+}
+
+.pm-stock-section button:nth-child(2),
+.pm-stock-section button:nth-child(4) {
+  background-color: #2196f3;
+}
+
+.pm-stock-section button:hover {
+  opacity: 0.85;
+}

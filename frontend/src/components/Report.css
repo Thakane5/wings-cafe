@@ -1,0 +1,95 @@
+.report-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+.stats-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  flex: 1 1 200px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: scale(1.05);
+  background-color: transparent;
+}
+
+.stat-icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 22px;
+  font-weight: bold;
+}
+.low-stock-section{
+  border-radius: 8px;
+  background-color: #fff;
+  text-align: center;
+ 
+}
+.low-stock-section:hover{
+  transform: scale(1.05);
+  background-color: transparent;
+}
+.low-stock-list{
+  list-style: none;
+
+}
+
+.transactions-section {
+  margin-top: 30px;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.transactions-table th,
+.transactions-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.transactions-table th {
+  background-color: #f2f2f2;
+}
+
+.transactions-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+/* Highlight low stock items in Qty After column */
+.transactions-table td.qty-low {
+  background-color: #ffdddd;
+  color: #d8000c;
+  font-weight: bold;
+}
+
+
+.transactions-table tbody tr:hover {
+  background-color: blue;
+}
+
+.no-activity {
+  text-align: center;
+  color: #555;
+  padding: 20px;
+}

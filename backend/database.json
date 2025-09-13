@@ -1,0 +1,79 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Softy",
+      "description": "Sponge cakes",
+      "category": "Cake",
+      "price": 2,
+      "quantity": 8,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vgedZa6d8ky7eUxHmMD0cZUm0jV6mzl3Bg&s"
+    },
+    {
+      "id": 2,
+      "name": "Drink Opop",
+      "description": "powdered soft drinks",
+      "category": "soft drinks",
+      "price": 1,
+      "quantity": 3,
+      "image": "https://promasidor.com/ao/wp-content/uploads/2024/11/7.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Sherbet",
+      "description": "Fizzy fun candy",
+      "category": "Candy",
+      "price": 1,
+      "quantity": 15,
+      "image": "https://www.piknmix.co.nz/cdn/shop/files/20240212-091809.jpg?v=1707697186&width=2664"
+    },
+    {
+      "id": 4,
+      "name": "Candy worms",
+      "description": "Sweet & sour swweets",
+      "category": "Sweets",
+      "price": 1,
+      "quantity": 6,
+      "image": "https://nikkispopcorn.com/cdn/shop/files/SourGummyWorm_2400x.webp?v=1688062594"
+    },
+    {
+      "id": 5,
+      "name": "Ice Cream",
+      "description": "Vanilla ice cream",
+      "category": "Frozen",
+      "price": 10,
+      "quantity": 2,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKu8P62HVXuHpelTmP4aA3B0ampP3krkNre-mCGZZXghFoNFOlU_SlxtX7F1v_5E0gSSk&usqp=CAU"
+    },
+    {
+      "id": 6,
+      "name": "Coke",
+      "description": "Fizzy Drink",
+      "category": "Non-Alcoholic Beverage",
+      "price": 20,
+      "quantity": 20,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv0fZNGXuxYO1XjqS6qSJvvXiI_AG9S5Lxzg&s"
+    },
+    {
+      "id": 7,
+      "name": "Simba Chips",
+      "description": "thin slices of potato ",
+      "category": "Snack",
+      "price": 20,
+      "quantity": 4,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5Oag9c9Wpbw3SwRLXEL5vOUBC8MQlwj5ZXQ&s"
+    },
+    {
+      "id": 8,
+      "name": "Stimrol",
+      "description": "Stimrol air ruch ",
+      "category": "Chewing Gum",
+      "price": 2,
+      "quantity": 10,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ230sQ7ymuzHNFgnUpxMyCe7gnMDTslyWQ5A&s"
+    }
+  ],
+  "sales": [],
+  
+  "transactions": []
+}

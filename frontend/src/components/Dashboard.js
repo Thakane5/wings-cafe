@@ -4,9 +4,12 @@ import "./Dashboard.css";
 function Dashboard() {
   const [products, setProducts] = useState([]);
 
+  // Fetch products from backend (use env variable in production, fallback to localhost for local dev)
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/products`);
+      const apiUrl =
+        process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const res = await fetch(`${apiUrl}/products`);
       const data = await res.json();
       setProducts(data);
     } catch (error) {
@@ -26,7 +29,9 @@ function Dashboard() {
           products.map((product) => (
             <div
               key={product.id}
-              className={`product-card ${product.quantity < 5 ? "low-stock" : ""}`}
+              className={`product-card ${
+                product.quantity < 5 ? "low-stock" : ""
+              }`}
             >
               <div className="product-image">
                 <img src={product.image} alt={product.name} />
@@ -40,7 +45,9 @@ function Dashboard() {
                 <p className="product-description">{product.description}</p>
                 <div className="product-footer">
                   <span className="product-price">M{product.price}</span>
-                  <span className="product-quantity">Qty: {product.quantity}</span>
+                  <span className="product-quantity">
+                    Qty: {product.quantity}
+                  </span>
                 </div>
               </div>
             </div>

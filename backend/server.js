@@ -4,13 +4,13 @@ const path = require("path");
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 5000; // Render's port
+const PORT = process.env.PORT || 5000;
 
-// Middlewares
+// Middleware
 app.use(cors());
-app.use(express.json()); // Use express.json() instead of body-parser
+app.use(express.json());
 
-// Database file directly in backend folder
+// Database file path
 const DB_FILE = path.join(__dirname, "database.json");
 
 // Load DB
@@ -21,17 +21,18 @@ function loadDB() {
       JSON.stringify({ products: [], sales: [], transactions: [] }, null, 2)
     );
   }
-  return JSON.parse(fs.readFileSync(DB_FILE));
+  const data = fs.readFileSync(DB_FILE);
+  return JSON.parse(data);
 }
 
 // Save DB
-function saveDB(data) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+function saveDB(db) {
+  fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
 }
 
 // Add transaction helper
 function addTransaction(db, { name, price, qtyBefore, qtyAfter, action, total }) {
-  const transaction = {
+  db.transactions.push({
     id: Date.now(),
     date: new Date().toLocaleString(),
     name,
@@ -40,8 +41,7 @@ function addTransaction(db, { name, price, qtyBefore, qtyAfter, action, total })
     qtyAfter,
     action,
     total,
-  };
-  db.transactions.push(transaction);
+  });
 }
 
 // ---------------------- PRODUCTS ----------------------
@@ -52,15 +52,20 @@ app.get("/products", (req, res) => {
 
 app.post("/products", (req, res) => {
   const db = loadDB();
+  const { name, description, category, price, quantity, image } = req.body;
+
+  if (!name) return res.status(400).json({ error: "Product name required" });
+
   const newProduct = {
     id: Date.now(),
-    name: req.body.name,
-    description: req.body.description || "New product",
-    category: req.body.category || "General",
-    price: req.body.price || 0,
-    quantity: req.body.quantity || 0,
-    image: req.body.image || "",
+    name,
+    description: description || "New product",
+    category: category || "General",
+    price: price || 0,
+    quantity: quantity || 0,
+    image: image || "",
   };
+
   db.products.push(newProduct);
 
   addTransaction(db, {
@@ -89,7 +94,7 @@ app.patch("/products/:id", (req, res) => {
       name: product.name,
       price: product.price,
       qtyBefore: prevQty,
-      qtyAfter: req.body.quantity,
+      qtyAfter: product.quantity,
       action: "Restocked",
       total: product.price * (req.body.quantity - prevQty),
     });
@@ -119,28 +124,34 @@ app.delete("/products/:id", (req, res) => {
 });
 
 // ---------------------- SALES ----------------------
+app.get("/sales", (req, res) => {
+  const db = loadDB();
+  res.json(db.sales);
+});
+
 app.post("/sales", (req, res) => {
   const db = loadDB();
-  const product = db.products.find((p) => p.id === req.body.productId);
-  if (!product) return res.status(404).json({ error: "Product not found" });
+  const { productId, quantity } = req.body;
 
-  const qty = req.body.quantity;
-  if (qty > product.quantity) {
-    return res.status(400).json({ error: "Not enough stock" });
-  }
+  if (!productId || !quantity) return res.status(400).json({ error: "Invalid sale data" });
+
+  const product = db.products.find((p) => p.id === parseInt(productId));
+  if (!product) return res.status(404).json({ error: "Product not found" });
+  if (quantity > product.quantity) return res.status(400).json({ error: "Not enough stock" });
 
   const sale = {
     id: Date.now(),
     productId: product.id,
     productName: product.name,
-    quantity: qty,
-    total: product.price * qty,
+    quantity,
+    total: product.price * quantity,
     date: new Date().toLocaleString(),
   };
+
   db.sales.push(sale);
 
   const prevQty = product.quantity;
-  product.quantity -= qty;
+  product.quantity -= quantity;
 
   addTransaction(db, {
     name: product.name,
@@ -161,7 +172,7 @@ app.get("/transactions", (req, res) => {
   res.json(db.transactions);
 });
 
-// ---------------------- SERVER ----------------------
+// ---------------------- START SERVER ----------------------
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });

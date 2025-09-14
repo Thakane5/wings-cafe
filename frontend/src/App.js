@@ -4,7 +4,6 @@ import Dashboard from "./components/Dashboard";
 import ProductManagement from "./components/ProductManagement";
 import Sales from "./components/Sales";
 import Report from "./components/Report";
-import StockManagement from "./components/StockManagement"; 
 import "./App.css";
 
 export default function App() {
@@ -26,7 +25,6 @@ export default function App() {
             <Link to="/products">Products</Link>
             <Link to="/sales">Sales</Link>
             <Link to="/reports">Reports</Link>
-            <Link to="/stock">Stock</Link> 
           </div>
         </nav>
 
@@ -36,7 +34,6 @@ export default function App() {
             <Route path="/products" element={<ProductManagement />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/reports" element={<Report />} />
-            <Route path="/stock" element={<StockManagement />} />
           </Routes>
         </main>
 
@@ -44,7 +41,7 @@ export default function App() {
           <div className="footer-content">
             <div className="footer-section">
               <h3>Contact Us</h3>
-              <p>Email: thakaneasello@gmal.com</p>
+              <p>Email: thakaneasello@gmail.com</p>
               <p>Phone: +266 59870938</p>
               <p>Address: Berea, Liotloaneng</p>
             </div>

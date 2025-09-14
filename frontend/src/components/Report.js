@@ -3,40 +3,106 @@ import "./Report.css";
 
 function Report() {
   const [products, setProducts] = useState([]);
+  const [stock, setStock] = useState({});
   const [sales, setSales] = useState([]);
   const [transactions, setTransactions] = useState([]);
-  const API_BASE = process.env.REACT_APP_API_URL;
 
-  const fetchData = async () => {
-    try {
-      const [productsRes, salesRes, transactionsRes] = await Promise.all([
-        fetch(`${API_BASE}/products`),
-        fetch(`${API_BASE}/sales`),
-        fetch(`${API_BASE}/transactions`)
-      ]);
+  // Keep previous state for detecting changes
+  const [prevProducts, setPrevProducts] = useState([]);
+  const [prevStock, setPrevStock] = useState({});
 
-      if (!productsRes.ok || !salesRes.ok || !transactionsRes.ok)
-        throw new Error("Failed to fetch data");
+  const loadData = () => {
+    const savedProducts = JSON.parse(localStorage.getItem("products")) || [];
+    const savedStock = JSON.parse(localStorage.getItem("stock")) || {};
+    const savedSales = JSON.parse(localStorage.getItem("sales")) || [];
 
-      const productsData = await productsRes.json();
-      const salesData = await salesRes.json();
-      const transactionsData = await transactionsRes.json();
+    setProducts(savedProducts);
+    setStock(savedStock);
+    setSales(savedSales);
 
-      setProducts(productsData);
-      setSales(salesData);
-      setTransactions(transactionsData);
-    } catch (error) {
-      console.error("Error fetching report data:", error);
-    }
+    const newTransactions = [];
+
+    // Detect added/restocked
+    savedProducts.forEach((product) => {
+      const prevQty = prevStock[product.id] || 0;
+      const currentQty = savedStock[product.id] || 0;
+
+      if (!prevProducts.find((p) => p.id === product.id)) {
+        // Added
+        newTransactions.push({
+          date: new Date().toLocaleString(),
+          name: product.name,
+          price: product.price,
+          qtyBefore: 0,
+          qtyAfter: currentQty,
+          action: "Added",
+          total: product.price * currentQty,
+        });
+      } else if (currentQty > prevQty) {
+        // Restocked
+        newTransactions.push({
+          date: new Date().toLocaleString(),
+          name: product.name,
+          price: product.price,
+          qtyBefore: prevQty,
+          qtyAfter: currentQty,
+          action: "Restocked",
+          total: product.price * (currentQty - prevQty),
+        });
+      }
+    });
+
+    // Deleted products
+    prevProducts.forEach((prevProd) => {
+      if (!savedProducts.find((p) => p.id === prevProd.id)) {
+        const prevQty = prevStock[prevProd.id] || 0;
+        newTransactions.push({
+          date: new Date().toLocaleString(),
+          name: prevProd.name,
+          price: prevProd.price,
+          qtyBefore: prevQty,
+          qtyAfter: 0,
+          action: "Deleted",
+          total: prevProd.price * prevQty,
+        });
+      }
+    });
+
+    // Sold products
+    savedSales.forEach((sale) => {
+      const currentQty = savedStock[sale.productId] || 0;
+      const qtyBefore = currentQty + sale.quantity;
+
+      newTransactions.push({
+        date: sale.date,
+        name: sale.productName,
+        price: sale.total / sale.quantity,
+        qtyBefore: qtyBefore,
+        qtyAfter: currentQty,
+        action: "Sold",
+        total: sale.total,
+      });
+    });
+
+    setTransactions(newTransactions);
+
+    // Update previous state
+    setPrevProducts(savedProducts);
+    setPrevStock(savedStock);
   };
 
   useEffect(() => {
-    fetchData();
+    loadData();
+
+    const handleStorageChange = () => loadData();
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const totalProducts = products.length;
-  const totalStock = products.reduce((sum, p) => sum + (p.quantity || 0), 0);
-  const lowStockProducts = products.filter((p) => (p.quantity || 0) < 5);
+  const totalStock = products.reduce((sum, p) => sum + (stock[p.id] || 0), 0);
+  const lowStockProducts = products.filter((p) => (stock[p.id] || 0) < 5);
   const totalSales = sales.reduce((sum, s) => sum + (s.total || 0), 0);
 
   return (
@@ -57,7 +123,7 @@ function Report() {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon">⚠️</div>
+          <div className="stat-icon">⚠</div>
           <h3>Low Stock Items</h3>
           <p className="stat-number">{lowStockProducts.length}</p>
         </div>
@@ -71,11 +137,11 @@ function Report() {
 
       {lowStockProducts.length > 0 && (
         <div className="low-stock-section">
-          <h2>⚠️ Low Stock Items</h2>
+          <h2>⚠ Low Stock Items</h2>
           <ul className="low-stock-list">
             {lowStockProducts.map((p) => (
               <li key={p.id}>
-                {p.name} — Only {p.quantity} left
+                {p.name} — Only {stock[p.id] || 0} left
               </li>
             ))}
           </ul>
